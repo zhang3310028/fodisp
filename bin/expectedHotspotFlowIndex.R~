@@ -1,0 +1,3 @@
+expectHotspotFlowIndex<-function(amp.seq=""){
+	amp.start
+}

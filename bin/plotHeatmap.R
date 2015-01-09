@@ -1,0 +1,25 @@
+plotHeatMap<-function(x=matrix(),startFlow,flowOrder=c("T","C","A","G"),title=character()){
+	cord.x<-rep(1:nrow(x),ncol(x))
+	cord.y<-rep(1:ncol(x),each=nrow(x))
+	par(mar=c(2,2,2,1))
+	par(mai=c(0.5,0.5,0.5,1))
+	par(mgp=c(1.5,0.5,0))
+	plot(cord.y,cord.x,ylim=c(1,nrow(x)),xlim=c(1,ncol(x)),type="p",col="white",xlab="Flow index",ylab="Read index",main=title,xaxt="n")
+	axis(1,at=seq(1,ncol(x),5),labels=seq(1,ncol(x),5)+startFlow-1)
+	q0.99<-quantile(x,0.99,na.rm=T)
+	pal<-rev(rainbow(q0.99,start=0,end=0.64))
+	col<-as.integer(x)
+	col[which(col<=0)]<-1
+	col[which(col>q0.99)]<-q0.99
+	col<-pal[col]
+	col[col%in%NA]<-"white"
+	rect(cord.y-0.5,cord.x-0.5,cord.y+0.5,cord.x+0.5,border=NA,col=col)
+	y.cord<-((0.8-0.2)*(1:q0.99-1)/(q0.99-1)+0.2)*nrow(x)
+	rect(rep(ncol(x)*1.1,length(pal)),y.cord-0.5,rep(ncol(x)*1.15,length(pal)),y.cord+0.5,col=pal,xpd=T,border=NA)
+	y.tck<-seq(min(y.cord),max(y.cord),length=11)
+	y.lab<-as.character(as.integer(seq(0,1,0.1)*q0.99))
+	y.lab[1]<-paste("<",y.lab[1])
+	y.lab[length(y.lab)]<-paste(">",y.lab[length(y.lab)])
+	text(x=rep(ncol(x)*1.22,length(y.tck)),y=y.tck,labels=y.lab,xpd=T,adj=1)
+	text(x=1:ncol(x),y=nrow(x)*1.02,labels=flowOrder,xpd=T)
+}

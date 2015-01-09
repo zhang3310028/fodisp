@@ -1,0 +1,3 @@
+clusterFlowMatrix<-function(mat,hotspotFlow,max.dist=80){
+	  hs<-mat[,hotspotFlow]
+}
